@@ -1,11 +1,117 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+interface Post {
+  postTitle: string;
+  body: {
+    html: string;
+  };
+  date: string;
+  photos: {
+    url: string;
+  }[];
+}
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const query = {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    query: `
+        query BlogPosts {
+              posts {
+                postTitle
+                body {
+                  html
+                }
+                date
+                photos {
+                  url(transformation:{ image:{resize: {width:1600}}})
+                }
+              }
+            }
+      `,
+    }),
+};
+
+let posts: Post[] = [];
+try {
+  const response = await fetch(import.meta.env.HYGRAPH_ENDPOINT, query);
+  if (!response.ok) {
+    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+  }
+  const json = await response.json();
+  posts = json.data.posts;
+} catch (error) {
+  console.error("Failed to fetch posts:", error);
+  posts = [];
+}
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Our Estonian Adventure</title>
+  </head>
+  <body>
+    <h1>Our Estonian Adventure</h1>
+    <main>
+      {posts.map((post) => (
+        <article class="post">
+          <h2>{post.postTitle}</h2>
+          <div class="post-body" set:html={post.body.html}></div>
+          {post.photos && post.photos.length > 0 && (
+            <div class="gallery">
+              {post.photos.map(photo => (
+                <img src={photo.url} alt={`Photo for ${post.postTitle}`} loading="lazy" />
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .post {
+    border-top: 1px solid #eee;
+    padding: 2rem 0;
+  }
+  .post-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .gallery {
+      grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+    }
+  }
+  .gallery img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+</style>
