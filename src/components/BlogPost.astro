@@ -8,7 +8,7 @@ const { post } = Astro.props;
   <div set:html={post.body.html} />
   <div class="photos">
     {post.photos.map((photo) => (
-      <img src={photo.url} alt="" />
+      <img src={photo.url} alt={photo.alt ? photo.alt : `Photo from ${post.postTitle}`} />
     ))}
   </div>
 </article>
