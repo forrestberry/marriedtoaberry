@@ -1,21 +1,33 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getPosts } from '../../lib/hygraph';
-import BlogPost from '../../components/BlogPost.astro';
+import { getPost, getPosts } from '../../lib/hygraph';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post },
   }));
 }
 
-const { post } = Astro.props;
+const { slug } = Astro.params;
+const post = await getPost(slug);
+
+if (!post) {
+  return Astro.redirect('/404'); // Or handle as appropriate
+}
 ---
 
 <Layout title={post.postTitle}>
   <main>
-    <BlogPost post={post} />
+    <article>
+      <h1>{post.postTitle}</h1>
+      <p><small>{post.date} {post.author && post.author.length > 0 && `  |  ${post.author.map(a => a.name).join(', ')}`}</small></p>
+      <div class="photos">
+        {post.photos.map((photo) => (
+          <img src={photo.url} alt={photo.alt ? photo.alt : `Photo from ${post.postTitle}`} />
+        ))}
+      </div>
+      <div set:html={post.body.html} />
+    </article>
   </main>
 </Layout>
