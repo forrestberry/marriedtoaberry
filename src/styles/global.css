@@ -1,18 +1,4 @@
-:root {
-  --background: #fafafa;
-  --text: #212121;
-  --accent: #ff3d00;
-  --accent-text: #fafafa;
-  --nav-background: #eeeeee;
-}
-
-[data-theme='dark'] {
-  --background: #212121;
-  --text: #fafafa;
-  --accent: #ff3d00;
-  --accent-text: #fafafa;
-  --nav-background: #424242;
-}
+@import './vars.css';
 
 body {
   background-color: var(--background);
@@ -25,7 +11,8 @@ body {
 
 main {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 h1, h2 {

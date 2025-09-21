@@ -1,0 +1,23 @@
+#theme-switcher {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.icon-sun,
+.icon-moon {
+    stroke: var(--text);
+}
+
+.icon-moon {
+    display: none;
+}
+
+html[data-theme="dark"] .icon-sun {
+    display: none;
+}
+
+html[data-theme="dark"] .icon-moon {
+    display: block;
+}
