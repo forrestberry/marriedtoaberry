@@ -18,6 +18,7 @@ nav {
     font-weight: bold;
     text-decoration: none;
     color: var(--text);
+    margin: 0;
 }
 
 ul {
