@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getPosts } from '../lib/hygraph';
-import BlogPost from '../components/BlogPost.astro';
+import BlogPostCard from '../components/BlogPostCard.astro';
 
 const posts = await getPosts();
 ---
@@ -11,7 +11,7 @@ const posts = await getPosts();
 		{
 			posts.map((post) => (
 				<a href={`/blog/${post.slug}`}>
-					<BlogPost post={post} />
+					<BlogPostCard post={post} />
 				</a>
 			))
 		}

@@ -5,6 +5,7 @@
   --accent-text: #fafafa;
   --nav-background: #eeeeee;
   --border-color: #ccc;
+  --text-muted: #757575;
 }
 
 [data-theme='dark'] {
@@ -14,4 +15,5 @@
   --accent-text: #fafafa;
   --nav-background: #424242;
   --border-color: #424242;
+  --text-muted: #bdbdbd;
 }

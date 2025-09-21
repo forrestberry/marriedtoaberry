@@ -1,0 +1,20 @@
+---
+import '../styles/BlogPost.css';
+const { post } = Astro.props;
+const bodyWithoutImages = post.body.html.replace(/<img[^>]*>/g, "");
+const plainTextBody = bodyWithoutImages.replace(/<[^>]+>/g, '');
+const truncatedBody = plainTextBody.length > 150 ? plainTextBody.substring(0, 150) + '...' : plainTextBody;
+---
+
+<article>
+  <div class="thumbnail">
+    {post.photos.length > 0 && (
+      <img src={post.photos[0].url} alt={post.photos[0].alt ? post.photos[0].alt : `Photo from ${post.postTitle}`} />
+    )}
+  </div>
+  <div class="content">
+    <h2>{post.postTitle}</h2>
+    <div class="body-preview">{truncatedBody}</div>
+    <p class="date"><small>{post.date} {post.author && post.author.length > 0 && `  |  ${post.author.map(a => a.name).join(', ')}`}</small></p>
+  </div>
+</article>

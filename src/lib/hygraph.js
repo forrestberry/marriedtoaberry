@@ -18,6 +18,9 @@ export async function getPosts() {
           html
         }
         date
+        author {
+          name
+        }
         photos {
           url(transformation:{ image:{resize: {width:1600}}})
         }
