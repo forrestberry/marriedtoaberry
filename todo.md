@@ -3,6 +3,8 @@
     - Link to home
     - link to theolexica
     - link to a testimony/what is the gospel page
+    - link to hbf
+    - link to gbc
 - home
     - show excerpt of blog posts
     - update link styling to be prettier
