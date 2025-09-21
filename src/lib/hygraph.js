@@ -1,3 +1,14 @@
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+}
+
 export async function getPosts() {
   const query = `
     query BlogPosts {
@@ -29,5 +40,19 @@ export async function getPosts() {
     return [];
   }
 
-  return json.data.posts;
+  const posts = json.data.posts.map((post) => {
+    const date = new Date(post.date);
+    const slug = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${slugify(post.postTitle)}`;
+    return {
+      ...post,
+      slug,
+    };
+  });
+
+  return posts;
+}
+
+export async function getPost(slug) {
+  const posts = await getPosts();
+  return posts.find((post) => post.slug === slug);
 }

@@ -11,7 +11,9 @@ const posts = await getPosts();
 		<h1>Our Estonian Adventure</h1>
 		{
 			posts.map((post) => (
-				<BlogPost post={post} />
+				<a href={`/blog/${post.slug}`}>
+					<BlogPost post={post} />
+				</a>
 			))
 		}
 	</main>
