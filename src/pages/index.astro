@@ -1,77 +1,21 @@
 ---
-interface Post {
-  postTitle: string;
-  body: {
-    html: string;
-  };
-  date: string;
-  photos: {
-    url: string;
-  }[];
-}
+import Layout from '../layouts/Layout.astro';
+import { getPosts } from '../lib/hygraph';
+import BlogPost from '../components/BlogPost.astro';
 
-const query = {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    query: `
-        query BlogPosts {
-              posts {
-                postTitle
-                body {
-                  html
-                }
-                date
-                photos {
-                  url(transformation:{ image:{resize: {width:1600}}})
-                }
-              }
-            }
-      `,
-    }),
-};
-
-let posts: Post[] = [];
-try {
-  const response = await fetch(import.meta.env.HYGRAPH_ENDPOINT, query);
-  if (!response.ok) {
-    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-  }
-  const json = await response.json();
-  posts = json.data.posts;
-} catch (error) {
-  console.error("Failed to fetch posts:", error);
-  posts = [];
-}
+const posts = await getPosts();
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Our Estonian Adventure</title>
-  </head>
-  <body>
-    <h1>Our Estonian Adventure</h1>
-    <main>
-      {posts.map((post) => (
-        <article class="post">
-          <h2>{post.postTitle}</h2>
-          <div class="post-body" set:html={post.body.html}></div>
-          {post.photos && post.photos.length > 0 && (
-            <div class="gallery">
-              {post.photos.map(photo => (
-                <img src={photo.url} alt={`Photo for ${post.postTitle}`} loading="lazy" />
-              ))}
-            </div>
-          )}
-        </article>
-      ))}
-    </main>
-  </body>
-</html>
+<Layout title="Our Estonian Adventure">
+	<main>
+		<h1>Our Estonian Adventure</h1>
+		{
+			posts.map((post) => (
+				<BlogPost post={post} />
+			))
+		}
+	</main>
+</Layout>
 
 <style>
   body {

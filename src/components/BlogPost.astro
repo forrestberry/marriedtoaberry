@@ -1,0 +1,33 @@
+---
+const { post } = Astro.props;
+---
+
+<article>
+  <h2>{post.postTitle}</h2>
+  <p><small>{post.date}</small></p>
+  <div set:html={post.body.html} />
+  <div class="photos">
+    {post.photos.map((photo) => (
+      <img src={photo.url} alt={photo.alt ? photo.alt : `Photo from ${post.postTitle}`} />
+    ))}
+  </div>
+</article>
+
+<style>
+  article {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+</style>
