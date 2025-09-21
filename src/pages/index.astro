@@ -6,9 +6,9 @@ import BlogPost from '../components/BlogPost.astro';
 const posts = await getPosts();
 ---
 
-<Layout title="Married to a Berry">
+<Layout title="Our Estonian Adventure">
 	<main>
-		<h1>Married to a Berry</h1>
+		<h1>Our Estonian Adventure</h1>
 		{
 			posts.map((post) => (
 				<BlogPost post={post} />
@@ -16,3 +16,46 @@ const posts = await getPosts();
 		}
 	</main>
 </Layout>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .post {
+    border-top: 1px solid #eee;
+    padding: 2rem 0;
+  }
+  .post-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .gallery {
+      grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+    }
+  }
+  .gallery img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+</style>
